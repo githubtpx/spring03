@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	 
+	<!-- 目标对象：  -->	 
+	<bean id="arithmeticCalculatorImpl" class="com.atguigu.aspectJ.xml.ArithmeticCalculatorImpl"></bean>
+	
+	
+	<!-- 切面：	
+		   它们是一个IOC容器的一个组件  -->
+	<bean id="loggingAspect" class="com.atguigu.aspectJ.xml.LoggingAspect"></bean>
+	<bean id="validationAspect" class="com.atguigu.aspectJ.xml.ValidationAspect"></bean>
+
+	
+	<!-- AOP：
+			     切面是谁？		配置完成之后它既是一个组件又是一个切面   
+			     通知？   
+			     切入点表达式？ -->
+	<aop:config>
+		<!-- 切面 -->
+		<aop:aspect ref="loggingAspect"  order="2">
+			<!-- 切入点表达式重用 -->
+			<aop:pointcut expression="execution(* com.atguigu.aspectJ.xml.*.*(..))" id="myPointCut"/>
+			
+			<!-- 通知 -->
+			<aop:before method="beforeMethod"  pointcut-ref="myPointCut"/>
+			<aop:after method="afterMethod"   pointcut-ref="myPointCut"/>
+			<aop:after-returning method="afterReturningMethod"   pointcut-ref="myPointCut" returning="result"/>
+			<aop:after-throwing method="afterThrowingMethod"   pointcut-ref="myPointCut"  throwing="ex"/>
+			<!-- <aop:around method="arroundMethod"  pointcut-ref="myPointCut"  /> -->
+		</aop:aspect>
+		
+		
+		<aop:aspect ref="validationAspect"   order="1">
+			<aop:before method="beforeMethod"  pointcut-ref="myPointCut"/>
+		</aop:aspect>
+		
+		
+	</aop:config>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	
+
+</beans>
